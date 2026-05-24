@@ -166,14 +166,6 @@ streamlit run dashboard/app.py
 
 ---
 
-## 👤 Author
-
-**Your Name**
-- 🔗 [LinkedIn](https://linkedin.com/in/yourprofile)
-- 🐙 [GitHub](https://github.com/yourusername)
-- 📧 your.email@example.com
-
----
 
 <p align="center">
   <i>Built with ❤️ as a Data Science portfolio project</i>
