@@ -464,7 +464,7 @@ if not st.session_state.entered_dashboard:
             <div style="font-size: 2rem; margin-bottom: 12px;">🔮</div>
             <h4 style="margin: 0 0 8px 0; color: #FFFFFF;">AI Churn Classification</h4>
             <p style="color: #94A3B8; font-size: 0.85rem; margin: 0; line-height: 1.5;">
-                Advanced machine learning models (XGBoost/LightGBM) optimized to trace drop-off probabilities dynamically.
+                Advanced machine learning models (Random Forest) optimized to trace drop-off probabilities dynamically.
             </p>
         </div>
         <div class="glass-card">
@@ -698,7 +698,7 @@ else:
                     </div>
                     <div>
                         <span style="font-size: 0.7rem; color: #94A3B8; text-transform: uppercase;">Mitigation Confidence</span>
-                        <div style="font-size: 1.15rem; font-weight: 700; color: #22C55E; margin-top: 2px;">High (XGBoost)</div>
+                        <div style="font-size: 1.15rem; font-weight: 700; color: #22C55E; margin-top: 2px;">High (Random Forest)</div>
                     </div>
                 </div>
             </div>
@@ -836,9 +836,9 @@ else:
             st.markdown("""
             <div class="glass-card animate-fade-in" style="border: 1px solid rgba(0, 212, 255, 0.4) !important; background: linear-gradient(135deg, rgba(15, 23, 42, 0.6), rgba(0, 212, 255, 0.05)) !important; height: 100%;">
                 <span class="glow-badge" style="margin-bottom: 12px;">Champion Classifier</span>
-                <h3 style="margin: 0 0 8px 0; color: #FFFFFF;">XGBoost (Ensemble)</h3>
+                <h3 style="margin: 0 0 8px 0; color: #FFFFFF;">Random Forest (Ensemble)</h3>
                 <p style="color: #94A3B8; font-size: 0.85rem; line-height: 1.6; margin: 0 0 20px 0;">
-                    Our production-grade XGBoost classifier was trained with stratified cross-validation and randomized search. 
+                    Our production-grade Random Forest classifier was trained with stratified cross-validation and randomized search. 
                     It demonstrates a high test ROC-AUC score, minimizing false alarms while maximizing customer drop-off captures.
                 </p>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
