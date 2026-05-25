@@ -24,7 +24,7 @@ import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler, LabelEncoder, OneHotEncoder
-from imblearn.over_sampling import SMOTE
+
 import joblib
 
 # ── Add project root to path ──────────────────────────────────────
@@ -171,15 +171,13 @@ def preprocess() -> None:
     )
     print(f"✂️   Train/test split → train: {X_train.shape[0]}, test: {X_test.shape[0]}")
 
-    # 9 ── SMOTE on training set only ─────────────────────────────
-    smote = SMOTE(random_state=config.SMOTE_RANDOM_STATE)
-    X_train_sm, y_train_sm = smote.fit_resample(X_train, y_train)
-    print(f"⚖️   SMOTE applied → train now: {X_train_sm.shape[0]} rows (balanced)")
+    # SMOTE removed for lightweight deployment
+    print(f"⚖️   SMOTE removed. Using standard train set: {X_train.shape[0]} rows")
 
     # 10 ── Save processed data ───────────────────────────────────
     os.makedirs(config.DATA_PROCESSED_DIR, exist_ok=True)
 
-    train_df = pd.concat([X_train_sm, y_train_sm.reset_index(drop=True)], axis=1)
+    train_df = pd.concat([X_train.reset_index(drop=True), y_train.reset_index(drop=True)], axis=1)
     test_df = pd.concat([X_test.reset_index(drop=True), y_test.reset_index(drop=True)], axis=1)
 
     train_df.to_csv(config.TRAIN_PATH, index=False)
@@ -192,7 +190,7 @@ def preprocess() -> None:
     joblib.dump(scaler, config.MODEL_PATHS["scaler"])
     joblib.dump(label_encoders, config.MODEL_PATHS["label_encoders"])
     joblib.dump(ohe, config.MODEL_PATHS["ohe_encoder"])
-    feature_names = list(X_train_sm.columns)
+    feature_names = list(X_train.columns)
     joblib.dump(feature_names, config.MODEL_PATHS["feature_names"])
     print("💾  Saved scaler, label encoders, OHE encoder, and feature names")
 

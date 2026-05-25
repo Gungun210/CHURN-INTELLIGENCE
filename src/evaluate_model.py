@@ -25,7 +25,7 @@ import matplotlib
 matplotlib.use("Agg")  # non-interactive backend for headless rendering
 import matplotlib.pyplot as plt
 import seaborn as sns
-import shap
+# import shap
 import joblib
 from sklearn.metrics import (
     classification_report,
@@ -413,7 +413,7 @@ def evaluate() -> None:
     plot_roc_curve(y_test, y_proba)
     plot_precision_recall_curve(y_test, y_proba)
     plot_feature_importance(model, feature_names)
-    generate_shap_plots(model, X_test, y_proba)
+    # generate_shap_plots(model, X_test, y_proba)
     print_business_summary(y_test, y_pred, y_proba, X_test)
 
     print("🎉  Model evaluation complete!\n")

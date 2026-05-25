@@ -32,9 +32,7 @@ from sklearn.metrics import (
     accuracy_score, precision_score, recall_score, f1_score, roc_auc_score,
 )
 
-from lightgbm import LGBMClassifier
 
-# ── Add project root to path ──────────────────────────────────────
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import config
 
@@ -161,47 +159,6 @@ def train_random_forest(
     return best, metrics, grid.best_params_, elapsed, cv_scores.mean()
 
 
-def train_xgboost(
-    X_train: pd.DataFrame, y_train: pd.Series, X_test: pd.DataFrame, y_test: pd.Series
-) -> tuple:
-    return best, metrics, search.best_params_, elapsed, cv_scores.mean()
-
-
-def train_lightgbm(
-    X_train: pd.DataFrame, y_train: pd.Series, X_test: pd.DataFrame, y_test: pd.Series
-) -> tuple:
-    """
-    Train LightGBM with RandomizedSearchCV for efficiency.
-
-    Returns
-    -------
-    tuple
-        (best_model, metrics_dict, best_params, training_time, cv_score)
-    """
-    print("\n🔹  Training LightGBM …")
-    skf = StratifiedKFold(n_splits=config.CV_FOLDS, shuffle=True, random_state=config.RANDOM_STATE)
-    lgb = LGBMClassifier(random_state=config.RANDOM_STATE, verbose=-1)
-    search = RandomizedSearchCV(
-        lgb, config.LIGHTGBM_PARAM_GRID,
-        n_iter=20, cv=skf, scoring="roc_auc",
-        random_state=config.RANDOM_STATE, n_jobs=-1,
-    )
-
-    start = time.time()
-    search.fit(X_train, y_train)
-    elapsed = time.time() - start
-
-    best = search.best_estimator_
-    cv_scores = cross_val_score(best, X_train, y_train, cv=skf, scoring="roc_auc")
-    metrics = evaluate_model_metrics(best, X_test, y_test)
-
-    print(f"   ⏱  Training time: {elapsed:.2f}s")
-    print(f"   🏆 Best params: {search.best_params_}")
-    print(f"   📊 CV ROC-AUC: {cv_scores.mean():.4f} ± {cv_scores.std():.4f}")
-
-    return best, metrics, search.best_params_, elapsed, cv_scores.mean()
-
-
 def train_all_models() -> None:
     """
     Train all four models, compare, select best, and save everything.
@@ -215,8 +172,6 @@ def train_all_models() -> None:
     for name, train_fn in [
         ("Logistic Regression", train_logistic_regression),
         ("Random Forest", train_random_forest),
-
-        ("LightGBM", train_lightgbm),
     ]:
         model, metrics, params, train_time, cv_auc = train_fn(X_train, y_train, X_test, y_test)
         models[name] = model
