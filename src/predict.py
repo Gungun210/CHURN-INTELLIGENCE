@@ -16,7 +16,7 @@ import sys
 import warnings
 import numpy as np
 import pandas as pd
-import shap
+
 import joblib
 
 # ── Add project root to path ──────────────────────────────────────
@@ -134,15 +134,7 @@ class ChurnPredictor:
                 "Model artefacts not found. Run train_model.py first."
             ) from exc
 
-        # Build SHAP explainer
-        try:
-            self.explainer = shap.TreeExplainer(self.model)
-        except Exception:
-            background = pd.DataFrame(
-                np.zeros((1, len(self.feature_names))),
-                columns=self.feature_names,
-            )
-            self.explainer = shap.KernelExplainer(lambda x: self.model.predict_proba(x)[:, 1], background)
+        # SHAP removed for lightweight deployment
 
     # ─────────────────────────────────────────
     # PREPROCESSING
@@ -296,21 +288,9 @@ class ChurnPredictor:
             risk = "High"
             action = "Immediate retention offer recommended"
 
-        # SHAP top reasons
-        try:
-            sv = self.explainer.shap_values(X)
-            if isinstance(sv, list):
-                sv = sv[1]
-            sv = sv[0]
-        except Exception:
-            sv = np.zeros(len(self.feature_names))
-
-        abs_sv = np.abs(sv)
-        top_idx = np.argsort(abs_sv)[::-1][:3]
-        reasons = [
-            _shap_direction(sv[i], self.feature_names[i], X.iloc[0, i])
-            for i in top_idx
-        ]
+        # Mock top reasons since SHAP is removed
+        sv = np.zeros(len(self.feature_names))
+        reasons = ["Feature analysis disabled (SHAP removed)"] * 3
 
         return {
             "churn_probability": churn_pct,

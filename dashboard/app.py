@@ -1071,32 +1071,20 @@ else:
             st.markdown("<h3 style='font-family:Space Grotesk;'>🌊 Individual SHAP Waterfall Explanation</h3>", unsafe_allow_html=True)
             
             try:
-                import shap
                 import matplotlib
                 matplotlib.use("Agg")
                 import matplotlib.pyplot as plt
                 
-                sv = result["shap_values"]
-                fn = result["feature_names"]
-                
-                predictor_obj = load_predictor()
-                base_val = predictor_obj.explainer.expected_value
-                if isinstance(base_val, (list, np.ndarray)):
-                    base_val = base_val[1] if len(base_val) > 1 else base_val[0]
-                
-                X_proc = predictor_obj._preprocess(customer_profile)
-                explanation = shap.Explanation(
-                    values=sv,
-                    base_values=base_val,
-                    data=X_proc.iloc[0].values,
-                    feature_names=fn
-                )
-                
+                # Mock SHAP waterfall for deployment stability
                 fig_wf, ax = plt.subplots(figsize=(10, 7))
-                # Set plot color parameters for dark styling if possible
                 fig_wf.patch.set_facecolor("none")
                 ax.set_facecolor("none")
-                shap.plots.waterfall(explanation, show=False, max_display=12)
+                plt.text(0.5, 0.5, 'SHAP Explainability Disabled\n(Lightweight Deployment Mode)', 
+                         horizontalalignment='center', verticalalignment='center',
+                         fontsize=14, color='#FFFFFF', fontweight='bold')
+                ax.axis('off')
+                
+                # shap.plots.waterfall removed
                 plt.title(f"Attribution Contribution Matrix (P={prob:.1f}%)", fontsize=11, fontweight="bold", color="#FFFFFF")
                 # Clean up labels text colors for dark background compatibility
                 for text in ax.texts:
